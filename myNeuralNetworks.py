@@ -71,4 +71,40 @@ class NN:
         return self.ao[:]
 
 
+    def backPropagate(self,targets,N,M):
+        if len(targets) != self.no:
+            raise ValueError('wrong number of target values')
+        output_detas = [0.0] * self.no
+
+        for k in range(self.no):
+            error = targets[k] - self.ao[k]
+            output_detas[k] = derivative_tanh(self.ao[k]) * error
+
+        hidden_deltas = [0.0] * self.nh
+        for j in range(self.nh):
+            error = 0.0
+            for k in range(self.no):
+                error = error + output_detas[k] * self.wo[j][k]
+            hidden_deltas[j] = derivative_tanh(self.ah[j]) * error
+
+        for j in range(self.nh):
+            for k in range(self.no):
+                change = output_detas[k] * self.ah[j]
+                self.wo[j][k] = self.wo[j][k] + N*change + M*self.co[j][k]
+                self.co[j][k] = change
+
+        for i in range(self.ni):
+            for j in range(self.nh):
+                change = hidden_deltas[j] * self.ai[i]
+                self.wi[i][j] = self.wi[i][j] + N*change + M*self.ci[i][j]
+
+        error = 0.0
+        for k in range(len(targets)):
+            error = error + 0.5*(targets[k]-self.ao[k])**2
+
+        return error
+
+
+    
+
 if __name__ == "__main__":
