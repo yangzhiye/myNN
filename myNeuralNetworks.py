@@ -8,7 +8,7 @@ import random
 random.seed(0)
 
 #return a float number from a to b
-def return_rand(a,b):
+def rand(a,b):
     return random.uniform(a,b)
 
 #return a Matrix filled by fill , I is row , J is column
@@ -27,6 +27,32 @@ def derivative_tanh(y):
     return 1.0 - y**2
 
 
+class NN:
+    def __init__(self,ni,a,no):
+        self.ni = ni + 1
+        self.nh = int((ni+no)/2.0) + a
+        self.no = no
+
+        self.ai = [1.0]*self.ni
+        self.ah = [1.0]*self.nh
+        self.ao = [1.0]*self.no
+
+        self.wi = makeMatrix(self.ni,self.nh)
+        self.wo = makeMatrix(self.nh,self.no)
+
+        for i in range(self.ni):
+            for j in range(self.nh):
+                self.wi[i][j] = rand(-0.05,0.05)
+        for i in range(self.nh)
+            for j in range(self.no):
+                self.wo[i][j] = rand(-0.05,0.05)
+        self.ci = makeMatrix(self.ni,self.nh)
+        self.co = makeMatrix(self.nh,self.no)
+
+
+    def update(self,inputs):
+        
+
+
 
 if __name__ == "__main__":
-    
