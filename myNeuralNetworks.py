@@ -51,8 +51,24 @@ class NN:
 
 
     def update(self,inputs):
-        
+        if len(inputs) != self.ni-1
+            raise ValueError('wrong number of inputs')
+        for i in range(self.ni-1):
+            self.ah[i] = inputs[i]
 
+        for i in range(self.nh):
+            sum = 0.0
+            for i in range(self.ni):
+                sum = sum + self.ai[i] * self.wi[i][j]
+        self.ah[j] = tanh(sum)
+
+        for k in range(self.no):
+            sum = 0.0
+            for j in range(self.nh):
+                sum = sum + self.ah[j] * self.wo[j][k]
+            self.ao[k] = tanh(sum)
+
+        return self.ao[:]
 
 
 if __name__ == "__main__":
