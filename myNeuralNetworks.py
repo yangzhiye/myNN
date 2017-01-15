@@ -43,7 +43,7 @@ class NN:
         for i in range(self.ni):
             for j in range(self.nh):
                 self.wi[i][j] = rand(-0.05,0.05)
-        for i in range(self.nh)
+        for i in range(self.nh):
             for j in range(self.no):
                 self.wo[i][j] = rand(-0.05,0.05)
         self.ci = makeMatrix(self.ni,self.nh)
@@ -51,12 +51,12 @@ class NN:
 
 
     def update(self,inputs):
-        if len(inputs) != self.ni-1
+        if len(inputs) != self.ni-1:
             raise ValueError('wrong number of inputs')
         for i in range(self.ni-1):
             self.ah[i] = inputs[i]
 
-        for i in range(self.nh):
+        for j in range(self.nh):
             sum = 0.0
             for i in range(self.ni):
                 sum = sum + self.ai[i] * self.wi[i][j]
@@ -105,6 +105,50 @@ class NN:
         return error
 
 
-    
+    def test(self,patterns):
+        pre = []
+        for p in patterns:
+            pre.append(self.update(p[0]))
+            print(p,'->',self.update(p[0]))
+        return pre
 
-if __name__ == "__main__":
+
+    def weights(self):
+        print('Input weights:')
+        for i in range(self.ni):
+            print(self.wi[i])
+        print()
+        print('Output weights:')
+        for j in range(self.nh):
+            print(self.wo[j])
+
+
+    def train(self, patterns, iterations=1000, N=0.01, M=0.01):
+        for i in range(iterations):
+            error = 0.0
+            for p in patterns:
+                inputs = p[0]
+                targets = p[1]
+                self.update(inputs)
+                error = error + self.backPropagate(targets, N, M)
+            if error < 0.00001:
+                    break
+
+
+def demo():
+    # Teach network XOR function
+    pkl_file = open('train.pkl','rb')  #data_Q1.pkl
+    pat = pickle.load(pkl_file)
+    pkl_file = open('test.pkl','rb')  #data_Q1.pkl
+    pat1 = pickle.load(pkl_file)
+    #print pat,pat1
+
+    # create a network with two input, two hidden, and one output nodes
+    n = NN(2, 4, 1)
+    # train it with some patterns
+    n.train(pat)
+    # test it
+    pre = n.test(pat1)
+
+if __name__ == '__main__':
+    demo()
